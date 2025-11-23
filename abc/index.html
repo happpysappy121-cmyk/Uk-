@@ -54,6 +54,214 @@
     </script>
 
     <style>
+        :root{
+        --bg-start: #fbfdfc;
+        --bg-end: #f3f6f5;
+        --card: rgba(255,255,255,0.85);
+        --glass: rgba(255,255,255,0.6);
+        --muted: #6b7280;
+        --accent: #0f2c25;
+        --gold: #d4af37;
+        --radius-lg: 18px;
+        --soft-shadow: 0 8px 24px rgba(15,44,37,0.08);
+        --elev-shadow: 0 20px 40px rgba(15,44,37,0.09);
+        --ios-border: rgba(15,44,37,0.06);
+    }
+
+    /* system font stack for iOS-like feel */
+    body{
+        font-family: -apple-system, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Manrope", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background: linear-gradient(180deg,var(--bg-start),var(--bg-end));
+        color: #1f2937;
+        -webkit-tap-highlight-color: transparent;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    /* subtle global smoothing for components */
+    * { transition-timing-function: cubic-bezier(.2,.8,.2,1); }
+
+    /* header: translucent, slim, frosted */
+    header#app-header{
+        background: rgba(255,255,255,0.7);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--ios-border);
+        box-shadow: 0 6px 18px rgba(12,22,18,0.04);
+    }
+
+    /* premium glass panel used for bottom nav */
+    .glass-panel{
+        background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.55));
+        backdrop-filter: blur(14px);
+        border-radius: 22px;
+        border: 1px solid var(--ios-border);
+        box-shadow: var(--soft-shadow);
+    }
+
+    /* cards: soft rounded, elevated */
+    .bg-white, .rounded-2xl, .rounded-xl {
+        background: var(--card);
+        border-radius: var(--radius-lg);
+    }
+    .shadow-sm { box-shadow: var(--soft-shadow); }
+    .shadow-2xl { box-shadow: var(--elev-shadow); }
+
+    /* buttons and primary controls */
+    button, .nav-item { 
+        transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+        border-radius: 14px;
+    }
+    button:active { transform: translateY(1px) scale(.997); }
+
+    /* modal overlays */
+    #festival-modal, #ai-modal, #sos-modal {
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+    }
+    #festival-modal > div, #ai-modal > div, #sos-modal > div {
+        border-radius: 20px;
+        box-shadow: var(--elev-shadow);
+        overflow: hidden;
+    }
+
+    /* district explorer: make slide smoother */
+    #district-explorer-modal {
+        border-radius: 18px;
+        overflow: clip;
+        box-shadow: 0 30px 60px rgba(11,22,18,0.12);
+    }
+    #district-detail-view {
+        border-left: 1px solid var(--ios-border);
+    }
+
+    /* card imagery: rounded and mask */
+    img { border-radius: 12px; object-fit: cover; }
+
+    /* festival months grid */
+    #festival-months button, #festival-months .p-2 {
+        border-radius: 12px;
+        box-shadow: none;
+    }
+
+    /* toast: center floating pill like iOS */
+    #toast {
+        left: 50%;
+        transform: translateX(-50%) translateY(-10px);
+        top: 18px;
+        padding: 12px 18px;
+        border-radius: 999px;
+        background: rgba(15,44,37,0.95);
+        box-shadow: 0 10px 30px rgba(3,10,8,0.25);
+    }
+
+    /* detail modal sheet: rounded top and subtle border */
+    #detail-modal {
+        border-top-left-radius: 24px;
+        border-top-right-radius: 24px;
+        box-shadow: 0 -20px 40px rgba(10,20,18,0.08);
+    }
+    #detail-modal .-mt-10 { margin-top: -42px; } /* keeps hero overlap neat */
+
+    /* input-like elements and small pills */
+    .rounded-full, .pill {
+        border-radius: 999px;
+    }
+
+    /* subtle micro-interactions */
+    .group-hover\:scale-110:hover { transform: scale(1.03); }
+    .transition-transform { transition: transform 280ms cubic-bezier(.2,.9,.2,1); }
+
+    /* accessible reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+        * { transition: none !important; animation: none !important; }
+    }
+
+    /* make bottom nav buttons circular and floating */
+    nav .nav-item { 
+        background: transparent;
+    }
+    nav .active-nav {
+        color: var(--accent) !important;
+        position: relative;
+    }
+    nav .active-nav::after{
+        content: "";
+        position: absolute;
+        bottom: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 36%;
+        height: 3px;
+        background: linear-gradient(90deg,var(--accent),var(--gold));
+        border-radius: 999px;
+        box-shadow: 0 6px 20px rgba(12,22,18,0.08);
+    }
+
+    /* gentle card borders for iOS feel */
+    .border-gray-100 {
+        border-color: var(--ios-border) !important;
+    }
+
+    /* Premium nav icon styles */
+    .nav-icon {
+        width: 44px;
+        height: 44px;
+        display: grid;
+        place-items: center;
+        border-radius: 12px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.35));
+        box-shadow: 0 6px 18px rgba(3,10,8,0.08), inset 0 1px 0 rgba(255,255,255,0.6);
+        border: 1px solid rgba(15,44,37,0.06);
+    }
+    .nav-icon svg { width:22px;height:22px; }
+    .nav-gradient {
+        background: linear-gradient(135deg,var(--accent),var(--gold));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    /* Profile extras */
+    .badge-pill { padding:6px 10px; border-radius:999px; font-weight:700; font-size:12px; display:inline-flex; gap:8px; align-items:center; }
+    .ach-card { background: linear-gradient(90deg,#fff 0%, #fbfbfb 100%); border:1px solid rgba(15,44,37,0.04); box-shadow: 0 8px 24px rgba(15,44,37,0.06); }
+    .toggle { width:42px; height:24px; background:#e6e6e8; border-radius:999px; position:relative; cursor:pointer; }
+    .toggle .dot { position:absolute; width:18px; height:18px; top:3px; left:3px; border-radius:999px; background:white; box-shadow:0 2px 6px rgba(3,10,8,0.15); transition: all 180ms; }
+    .toggle.on { background: linear-gradient(90deg,var(--accent),var(--gold)); }
+    .toggle.on .dot { left:21px; }
+    .trip-item { cursor:pointer; transition: transform 160ms; }
+    .trip-item:hover { transform: translateY(-4px); }
+
+    /* add premium slider styles */
+    <style>
+      /* Slider track + slide visuals */
+      .kv-track { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+      .kv-slide { scroll-snap-align: center; min-width: 320px; transform-origin: center; transition: transform 360ms cubic-bezier(.2,.9,.2,1), box-shadow 360ms; }
+      .kv-slide .bg-white { transition: transform 280ms, box-shadow 280ms, border-color 280ms; }
+      .kv-slide.active .bg-white { transform: translateY(-6px) scale(1.02); box-shadow: 0 22px 48px rgba(15,44,37,0.12); border-color: rgba(15,44,37,0.08); }
+
+      /* navigation controls */
+      .kv-nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 30; width: 40px; height: 40px; display: grid; place-items:center; background: rgba(255,255,255,0.85); border-radius: 10px; box-shadow: 0 6px 18px rgba(3,10,8,0.08); border:1px solid rgba(15,44,37,0.04); cursor:pointer; }
+      .kv-prev { left: 8px; }
+      .kv-next { right: 8px; }
+      .kv-nav:hover { transform: translateY(-50%) scale(1.02); }
+
+      /* dots */
+      .kv-dots { display:flex; gap:8px; justify-content:center; padding-top:8px; }
+      .kv-dot { width:8px; height:8px; background: rgba(15,44,37,0.12); border-radius:999px; cursor:pointer; transition: all 220ms; }
+      .kv-dot.active { width:28px; background: linear-gradient(90deg,var(--accent),var(--gold)); box-shadow: 0 6px 20px rgba(12,22,18,0.06); }
+
+      /* Responsive refinement */
+      @media (min-width: 768px) {
+        .kv-slide { min-width: 360px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .kv-slide, .kv-track { scroll-behavior: auto; transition: none !important; animation: none !important; }
+      }
+    </style>
+
+    <style>
         body {
             background-color: #f4f4f5;
             -webkit-tap-highlight-color: transparent;
@@ -193,14 +401,14 @@
             
             <div class="flex gap-3 overflow-x-auto no-scrollbar snap-x-mandatory pr-5 pb-1">
                 <!-- District Teaser Cards -->
-                <button class="district-btn snap-center w-[160px] h-20 shrink-0 relative overflow-hidden rounded-xl shadow-md active:scale-[0.98] transition-transform" onclick="openDistrictExplorer()">
-                    <img src="https://images.unsplash.com/photo-1596489390231-10c7104764d1?auto=format&fit=crop&w=300&q=80" onerror="this.src='https://placehold.co/300x150/1a3c33/d4af37?text=DEHRADUN'" class="w-full h-full object-cover opacity-70">
+                <button class="district-btn snap-center w-[160px] h-20 shrink-0 relative overflow-hidden rounded-xl shadow-md active:scale-[0.98] transition-transform" onclick="openDistrictFromTeaser('dehradun')">
+                    <img src="https://lh3.googleusercontent.com/d/1QDIOnPbaOEOlifROFWSW2xT4sEc3CPK8" onerror="this.src='https://placehold.co/300x150/1a3c33/d4af37?text=DEHRADUN'" class="w-full h-full object-cover opacity-70">
                     <div class="absolute inset-0 bg-alpine-dark/40 flex items-center justify-center">
                         <span class="font-serif font-bold text-lg text-white drop-shadow-lg">Dehradun</span>
                     </div>
                 </button>
-                <button class="district-btn snap-center w-[160px] h-20 shrink-0 relative overflow-hidden rounded-xl shadow-md active:scale-[0.98] transition-transform" onclick="openDistrictExplorer()">
-                    <img src="https://images.unsplash.com/photo-1563260840-02a8e8073574?auto=format&fit=crop&w=300&q=80" onerror="this.src='https://placehold.co/300x150/1a3c33/d4af37?text=NAINITAL'" class="w-full h-full object-cover opacity-70">
+                <button class="district-btn snap-center w-[160px] h-20 shrink-0 relative overflow-hidden rounded-xl shadow-md active:scale-[0.98] transition-transform" onclick="openDistrictFromTeaser('nainital')">
+                    <img src="https://lh3.googleusercontent.com/d/1VcBP6hPUTlxl2EdGhjdpY3vsDKD6royD" onerror="this.src='https://placehold.co/300x150/1a3c33/d4af37?text=NAINITAL'" class="w-full h-full object-cover opacity-70">
                     <div class="absolute inset-0 bg-alpine-dark/40 flex items-center justify-center">
                         <span class="font-serif font-bold text-lg text-white drop-shadow-lg">Nainital</span>
                     </div>
@@ -213,36 +421,95 @@
             </div>
         </div>
 
-        <!-- 4. KEY DESTINATIONS -->
-        <div class="px-5">
+        <!-- 4. KEY DESTINATIONS (REPLACED: interactive premium slider) -->
+        <div class="px-5 relative">
             <h3 class="text-lg font-bold text-alpine-dark font-serif mb-4">Must-Visit Destinations</h3>
-            
-            <!-- Card 1: Kedarnath -->
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-4 flex gap-4 items-center cursor-pointer" onclick="openDetail('kedarnath')">
-                <img src="https://images.unsplash.com/photo-1632734138692-a1622345e691?auto=format&fit=crop&w=150&q=80" onerror="this.src='https://placehold.co/150x100/1a3c33/ffffff?text=KEDARNATH'" class="w-20 h-20 object-cover rounded-xl shrink-0">
-                <div class="flex-1">
-                    <h4 class="font-bold text-alpine-dark text-base">Kedarnath Temple</h4>
-                    <p class="text-xs text-gray-500 mb-2">3,583m • Rudraprayag</p>
-                    <div class="flex items-center gap-2">
-                        <span class="text-[10px] font-bold bg-terracotta/10 text-terracotta px-2 py-0.5 rounded-full">Pilgrimage</span>
-                        <span class="text-[10px] font-bold bg-gold-accent/10 text-gold-accent px-2 py-0.5 rounded-full">High Alt</span>
-                    </div>
-                </div>
-                <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
-            </div>
 
-            <!-- Card 2: Haridwar -->
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-4 flex gap-4 items-center cursor-pointer" onclick="openDetail('haridwar')">
-                <img src="https://images.unsplash.com/photo-1596706059483-363e14441589?auto=format&fit=crop&w=150&q=80" onerror="this.src='https://placehold.co/150x100/1a3c33/ffffff?text=HARIDWAR'" class="w-20 h-20 object-cover rounded-xl shrink-0">
-                <div class="flex-1">
-                    <h4 class="font-bold text-alpine-dark text-base">Har Ki Pauri</h4>
-                    <p class="text-xs text-gray-500 mb-2">294m • Haridwar</p>
-                    <div class="flex items-center gap-2">
-                        <span class="text-[10px] font-bold bg-blue-50/50 text-blue-600 px-2 py-0.5 rounded-full">Ganga Aarti</span>
-                        <span class="text-[10px] font-bold bg-green-50/50 text-green-600 px-2 py-0.5 rounded-full">City Access</span>
+            <div class="relative">
+                <div id="kv-track" class="kv-track pl-5 overflow-x-auto no-scrollbar flex gap-4 pb-4">
+                    <!-- Slide A -->
+                    <div class="kv-slide snap-center shrink-0">
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex gap-4 items-center cursor-pointer" onclick="openDetail('kedarnath')">
+                            <img src="https://lh3.googleusercontent.com/d/1JcoKuRLm7B-f8ykEKDtktPAsBLaAKsef" onerror="this.src='https://placehold.co/150x100/1a3c33/ffffff?text=KEDARNATH'" class="w-20 h-20 object-cover rounded-xl shrink-0">
+                            <div class="flex-1">
+                                <h4 class="font-bold text-alpine-dark text-base">Kedarnath Temple</h4>
+                                <p class="text-xs text-gray-500 mb-2">3,583m • Rudraprayag</p>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-bold bg-terracotta/10 text-terracotta px-2 py-0.5 rounded-full">Pilgrimage</span>
+                                    <span class="text-[10px] font-bold bg-gold-accent/10 text-gold-accent px-2 py-0.5 rounded-full">High Alt</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mt-3 flex gap-4 items-center cursor-pointer" onclick="openDetail('haridwar')">
+                            <img src="https://lh3.googleusercontent.com/d/15dLcwV2Ym5Ov6NRL_BFUALZUox5F6i2d" onerror="this.src='https://placehold.co/150x100/1a3c33/ffffff?text=HARIDWAR'" class="w-20 h-20 object-cover rounded-xl shrink-0">
+                            <div class="flex-1">
+                                <h4 class="font-bold text-alpine-dark text-base">Har Ki Pauri</h4>
+                                <p class="text-xs text-gray-500 mb-2">294m • Haridwar</p>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-bold bg-blue-50/50 text-blue-600 px-2 py-0.5 rounded-full">Ganga Aarti</span>
+                                    <span class="text-[10px] font-bold bg-green-50/50 text-green-600 px-2 py-0.5 rounded-full">City Access</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide B -->
+                    <div class="kv-slide snap-center shrink-0">
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex gap-4 items-center cursor-pointer" onclick="openDetail('kedarnath')">
+                            <img src="https://lh3.googleusercontent.com/d/1qA3Kb9OeNaEexLT7y2UGlQnk3ArBsN05" onerror="this.src='https://placehold.co/150x100/1a3c33/ffffff?text=DHARI+DEVI'" class="w-20 h-20 object-cover rounded-xl shrink-0">
+                            <div class="flex-1">
+                                <h4 class="font-bold text-alpine-dark text-base">Dhari Devi Temple</h4>
+                                <p class="text-xs text-gray-500 mb-2">600m • Rudraprayag</p>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-bold bg-terracotta/10 text-terracotta px-2 py-0.5 rounded-full">Pilgrimage</span>
+                                    <span class="text-[10px] font-bold bg-gold-accent/10 text-gold-accent px-2 py-0.5 rounded-full">Historic</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mt-3 flex gap-4 items-center cursor-pointer" onclick="openDetail('haridwar')">
+                            <img src="https://lh3.googleusercontent.com/d/11i_0ZcYjmm9pDKNDxKL9j0M8Z_6xT7n2" onerror="this.src='https://placehold.co/150x100/1a3c33/ffffff?text=BADRINATH'" class="w-20 h-20 object-cover rounded-xl shrink-0">
+                            <div class="flex-1">
+                                <h4 class="font-bold text-alpine-dark text-base">Badrinath</h4>
+                                <p class="text-xs text-gray-500 mb-2">3133m • Chamoli</p>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-bold bg-blue-50/50 text-blue-600 px-2 py-0.5 rounded-full">Sacred</span>
+                                    <span class="text-[10px] font-bold bg-green-50/50 text-green-600 px-2 py-0.5 rounded-full">Pilgrim</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide C -->
+                    <div class="kv-slide snap-center shrink-0">
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex gap-4 items-center cursor-pointer" onclick="openDetail('kedarnath')">
+                            <img src="https://lh3.googleusercontent.com/d/1aP47Y3QKjFN_oUfXEEuhuc9cJ4pYmKB3" onerror="this.src='https://placehold.co/150x100/1a3c33/ffffff?text=RUDRANATH'" class="w-20 h-20 object-cover rounded-xl shrink-0">
+                            <div class="flex-1">
+                                <h4 class="font-bold text-alpine-dark text-base">Rudranath</h4>
+                                <p class="text-xs text-gray-500 mb-2">3,600m • Chamoli</p>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-bold bg-terracotta/10 text-terracotta px-2 py-0.5 rounded-full">Pilgrimage</span>
+                                    <span class="text-[10px] font-bold bg-gold-accent/10 text-gold-accent px-2 py-0.5 rounded-full">High Alt</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mt-3 flex gap-4 items-center cursor-pointer" onclick="openDetail('haridwar')">
+                            <img src="https://lh3.googleusercontent.com/d/1D2vV11RcXSG7AYBRrvx75CY1miOHWxmC" onerror="this.src='https://placehold.co/150x100/1a3c33/ffffff?text=TRIJUGI'" class="w-20 h-20 object-cover rounded-xl shrink-0">
+                            <div class="flex-1">
+                                <h4 class="font-bold text-alpine-dark text-base">TrijugiNarayan Temple</h4>
+                                <p class="text-xs text-gray-500 mb-2">294m • Rudraprayag</p>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-bold bg-blue-50/50 text-blue-600 px-2 py-0.5 rounded-full">Historic</span>
+                                    <span class="text-[10px] font-bold bg-green-50/50 text-green-600 px-2 py-0.5 rounded-full">Local</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+
+                <!-- arrows -->
+                <button id="kv-prev" class="kv-nav kv-prev hidden md:grid"><i class="fas fa-chevron-left text-sm text-alpine-dark"></i></button>
+                <button id="kv-next" class="kv-nav kv-next hidden md:grid"><i class="fas fa-chevron-right text-sm text-alpine-dark"></i></button>
+
+                <!-- dots -->
+                <div id="kv-dots" class="kv-dots mt-2"></div>
             </div>
         </div>
 
@@ -254,7 +521,7 @@
             <div class="pl-5 overflow-x-auto snap-x-mandatory no-scrollbar flex gap-4 pb-4">
                 <!-- Food 1 -->
                 <div class="w-[160px] h-[200px] shrink-0 snap-center rounded-2xl relative overflow-hidden cursor-pointer group">
-                    <img src="https://images.unsplash.com/photo-1606491956689-2ea28c67445c?auto=format&fit=crop&w=400&q=80" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Bal+Mithai'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <img src="BalMithai.jpeg" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Bal+Mithai'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                     <div class="absolute inset-0 bg-food-gradient"></div>
                     <div class="absolute bottom-3 left-3 text-white">
                         <p class="text-xs font-bold text-terracotta uppercase mb-1">Sweet</p>
@@ -268,6 +535,148 @@
                     <div class="absolute bottom-3 left-3 text-white">
                         <p class="text-xs font-bold text-terracotta uppercase mb-1">Savory</p>
                         <h4 class="font-serif font-bold text-lg leading-none">Kafuli</h4>
+                    </div>
+                </div> <!-- <-- ADDED missing closing tag -->
+
+                <!-- Food 3 -->
+                <div class="w-[160px] h-[200px] shrink-0 snap-center rounded-2xl relative overflow-hidden cursor-pointer group">
+                    <img src="PahadiKhana.jpeg" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=PahadiKhana'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Pahadi Thali">
+                    <div class="absolute inset-0 bg-food-gradient"></div>
+                    <div class="absolute bottom-3 left-3 text-white">
+                        <p class="text-xs font-bold text-terracotta uppercase mb-1">Thali</p>
+                        <h4 class="font-serif font-bold text-lg leading-none">Pahadi Thali</h4>
+                    </div>
+                </div>
+                                <!-- Food 4 -->
+                <div class="w-[160px] h-[200px] shrink-0 snap-center rounded-2xl relative overflow-hidden cursor-pointer group">
+                    <img src="PahadiKhana.jpeg" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=PahadiKhana'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Pahadi Thali">
+                    <div class="absolute inset-0 bg-food-gradient"></div>
+                    <div class="absolute bottom-3 left-3 text-white">
+                        <p class="text-xs font-bold text-terracotta uppercase mb-1">Thali</p>
+                        <h4 class="font-serif font-bold text-lg leading-none">Pahadi Thali</h4>
+                    </div>
+                </div>
+                                                <!-- Food  -->
+                <div class="w-[160px] h-[200px] shrink-0 snap-center rounded-2xl relative overflow-hidden cursor-pointer group">
+                    <img src="PahadiKhana.jpeg" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=PahadiKhana'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Pahadi Thali">
+                    <div class="absolute inset-0 bg-food-gradient"></div>
+                    <div class="absolute bottom-3 left-3 text-white">
+                        <p class="text-xs font-bold text-terracotta uppercase mb-1">Thali</p>
+                        <h4 class="font-serif font-bold text-lg leading-none">Pahadi Thali</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. LOCAL CRAFTS -->
+        <div class="px-5">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-lg font-bold text-alpine-dark font-serif">Local Crafts <i class="fas fa-paint-brush text-xs text-gold-accent ml-1"></i></h3>
+                <button onclick="showToast('Opening craft guide...')" class="text-xs font-bold text-gold-accent">See All</button>
+            </div>
+            <div class="pl-5 overflow-x-auto snap-x-mandatory no-scrollbar flex gap-4 pb-4">
+                <div class="w-[160px] h-[180px] shrink-0 snap-center rounded-2xl relative overflow-hidden cursor-pointer group">
+                    <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=80" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Woodcraft'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <div class="absolute bottom-3 left-3 text-white">
+                        <h4 class="font-serif font-bold text-lg leading-none">Wood Carving</h4>
+                        <p class="text-xs">Almora & Kasar Devi</p>
+                    </div>
+                </div>
+                <div class="w-[160px] h-[180px] shrink-0 snap-center rounded-2xl relative overflow-hidden cursor-pointer group">
+                    <img src="https://images.unsplash.com/photo-1555529771-4a33f3f6166a?auto=format&fit=crop&w=400&q=80" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Woolens'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <div class="absolute bottom-3 left-3 text-white">
+                        <h4 class="font-serif font-bold text-lg leading-none">Wool Weaves</h4>
+                        <p class="text-xs">Pithoragarh • Champawat</p>
+                    </div>
+                </div>
+                <div class="w-[160px] h-[180px] shrink-0 snap-center rounded-2xl relative overflow-hidden cursor-pointer group">
+                    <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=400&q=80" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Candles'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <div class="absolute bottom-3 left-3 text-white">
+                        <h4 class="font-serif font-bold text-lg leading-none">Wood & Candle Art</h4>
+                        <p class="text-xs">Nainital Markets</p>
+                    </div>
+                </div>
+                 <div class="w-[160px] h-[180px] shrink-0 snap-center rounded-2xl relative overflow-hidden cursor-pointer group">
+                    <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=400&q=80" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Candles'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <div class="absolute bottom-3 left-3 text-white">
+                        <h4 class="font-serif font-bold text-lg leading-none">Wood & Candle Art</h4>
+                        <p class="text-xs">Nainital Markets</p>
+                    </div>
+                </div>
+                 <div class="w-[160px] h-[180px] shrink-0 snap-center rounded-2xl relative overflow-hidden cursor-pointer group">
+                    <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=400&q=80" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Candles'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <div class="absolute bottom-3 left-3 text-white">
+                        <h4 class="font-serif font-bold text-lg leading-none">Wood & Candle Art</h4>
+                        <p class="text-xs">Nainital Markets</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. FESTIVALS CALENDAR -->
+        <div class="px-5">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-lg font-bold text-alpine-dark font-serif">Festivals & Events <i class="fas fa-calendar-check text-xs text-terracotta ml-1"></i></h3>
+                <button onclick="openFestivalCalendar()" class="text-xs font-bold text-gold-accent">Full Calendar</button>
+            </div>
+
+            <div id="festival-inline" class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                <p class="text-xs text-gray-500 mb-3">Tap any month to view festival highlights and local itineraries.</p>
+                <div id="festival-months" class="grid grid-cols-6 gap-2">
+                    <!-- months rendered by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Festival modal (list events for selected month) -->
+        <div id="festival-modal" class="fixed inset-0 z-[1200] hidden items-center justify-center p-4 bg-black/50">
+            <div class="bg-white w-full max-w-md rounded-2xl overflow-hidden">
+                <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+                    <h3 id="festival-modal-title" class="text-lg font-bold text-alpine-dark">Month</h3>
+                    <button onclick="closeFestivalCalendar()" class="text-alpine-dark p-2"><i class="fas fa-times"></i></button>
+                </div>
+                <div id="festival-modal-content" class="p-4 space-y-3 max-h-[60vh] overflow-y-auto">
+                    <!-- event items injected here -->
+                </div>
+                <div class="px-4 py-3 border-t border-gray-100">
+                    <button onclick="closeFestivalCalendar()" class="w-full py-2 rounded-lg bg-alpine-dark text-white font-bold">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. NATURE TRAILS (SHORT HIKES) -->
+        <div class="px-5">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-lg font-bold text-alpine-dark font-serif">Nature Trails <i class="fas fa-hiking text-xs text-eco-green ml-1"></i></h3>
+                <button onclick="showToast('Loading trails...')" class="text-xs font-bold text-gold-accent">Explore</button>
+            </div>
+            <div class="pl-5 overflow-x-auto snap-x-mandatory no-scrollbar flex gap-4 pb-6">
+                <div class="w-[220px] shrink-0 snap-center rounded-2xl overflow-hidden bg-white shadow-sm border border-gray-100 cursor-pointer" onclick="openDetail('rishikesh')">
+                    <img src="" onerror="this.src='https://placehold.co/600x300/1a3c33/d4af37?text=Trail'" class="w-full h-36 object-cover">
+                    <div class="p-3">
+                        <h4 class="font-bold text-alpine-dark">Kunjapuri Sunrise</h4>
+                        <p class="text-xs text-gray-500">Easy • 1.5 km</p>
+                    </div>
+                </div>
+                <div class="w-[220px] shrink-0 snap-center rounded-2xl overflow-hidden bg-white shadow-sm border border-gray-100 cursor-pointer" onclick="openDetail('chopta')">
+                    <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80" onerror="this.src='https://placehold.co/600x300/1a3c33/d4af37?text=Trek'" class="w-full h-36 object-cover">
+                    <div class="p-3">
+                        <h4 class="font-bold text-alpine-dark">Nag Tibba Ridge</h4>
+                        <p class="text-xs text-gray-500">Moderate • Weekend</p>
+                    </div>
+                </div>
+                <div class="w-[220px] shrink-0 snap-center rounded-2xl overflow-hidden bg-white shadow-sm border border-gray-100 cursor-pointer" onclick="openDetail('kedarnath')">
+                    <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=600&q=80" onerror="this.src='https://placehold.co/600x300/1a3c33/d4af37?text=Valley'" class="w-full h-36 object-cover">
+                    <div class="p-3">
+                        <h4 class="font-bold text-alpine-dark">Sahastradhara Walks</h4>
+                        <p class="text-xs text-gray-500">Easy • Family</p>
+                    </div>
+                </div>
+                                <div class="w-[220px] shrink-0 snap-center rounded-2xl overflow-hidden bg-white shadow-sm border border-gray-100 cursor-pointer" onclick="openDetail('chopta')">
+                    <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80" onerror="this.src='https://placehold.co/600x300/1a3c33/d4af37?text=Trek'" class="w-full h-36 object-cover">
+                    <div class="p-3">
+                        <h4 class="font-bold text-alpine-dark">Nag Tibba Ridge</h4>
+                        <p class="text-xs text-gray-500">Moderate • Weekend</p>
                     </div>
                 </div>
             </div>
@@ -336,6 +745,7 @@
         </div>
     </div>
 
+    
     <!-- BOTTOM NAV -->
     <nav class="fixed bottom-0 inset-x-0 glass-panel z-50 pb-safe pt-3 shadow-glass">
         <div class="max-w-md mx-auto flex justify-around items-center h-16 px-2">
@@ -518,7 +928,7 @@
         const places = {
             'rishikesh': { title: 'Rishikesh', district: 'Dehradun', img: 'https://images.unsplash.com/photo-1567878155218-c5b0580c6972?auto=format&fit=crop&w=600&q=80', start: 'Laxman Jhula', dist: '5 km', gain: '0 m', days: '1 Day' },
             'chopta': { title: 'Tungnath Trek (Chopta)', district: 'Rudraprayag', img: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=600&q=80', start: 'Chopta', dist: '3.5 km', gain: '800 m', days: '1 Day' },
-            'kedarnath': { title: 'Kedarnath Temple', district: 'Rudraprayag', img: 'https://images.unsplash.com/photo-1632734138692-a1622345e691?auto=format&fit=crop&w=600&q=80', start: 'Gaurikund', dist: '18 km', gain: '1,800 m', days: '2 Days' },
+            'kedarnath': { title: 'Kedarnath Temple', district: 'Rudrapprayag', img: 'https://images.unsplash.com/photo-1632734138692-a1622345e691?auto=format&fit=crop&w=600&q=80', start: 'Gaurikund', dist: '18 km', gain: '1,800 m', days: '2 Days' },
             'haridwar': { title: 'Har Ki Pauri', district: 'Haridwar', img: 'https://images.unsplash.com/photo-1596706059483-363e14441589?auto=format&fit=crop&w=600&q=80', start: 'Main Ghat', dist: '0 km', gain: '0 m', days: '1 Day' },
         };
 
@@ -526,7 +936,8 @@
         const districts = {
             'dehradun': { 
                 name: 'Dehradun', 
-                img: 'https://images.unsplash.com/photo-1596489390231-10c7104764d1?auto=format&fit=crop&w=600&q=80', 
+ 
+                img: 'https://lh3.googleusercontent.com/d/1pXDIPpy_EHAQiqCJZS79jTLSEZ4wfsYg', 
                 pop: '1.7 Mil', 
                 temp: '22°C', 
                 alt: '700m', 
@@ -536,11 +947,37 @@
                 culture: 'Cosmopolitan vibe with strong Garhwali roots. Famous for "Dehraduni Basmati" rice and Stick Jaw toffees. Major festivals: Jhanda Mela, Tapkeshwar Fair.',
                 logistics: 'Fly to Jolly Grant Airport (30km). Connected by Shatabdi train from Delhi. Local travel via auto-rickshaw or Smart City buses.',
                 fact: 'Dehradun is known as the "City of Love" and is home to the prestigious Indian Military Academy (IMA).',
-                id: 'dehradun'
+                id: 'dehradun',
+                details: {
+            destinations: [
+                'Robber\'s Cave (Guchhupani): A unique river cave, popular for wading through its cool streams and picnicking.',
+                'Mindrolling Monastery (Buddha Temple): One of the largest Buddhist Viharas in India, known for its massive Stupa and impressive Tibetan architecture.',
+                'Sahastradhara: A picturesque area known for its therapeutic Sulphur springs and waterfalls (The name means "Thousand-fold spring").',
+                'Forest Research Institute (FRI): A grand colonial-era building and deemed university with six museums on forestry, used in many Bollywood films.'
+            ],
+            cultureAndHeritage: [
+                'Tapkeshwar Temple: An ancient cave temple dedicated to Lord Shiva, where water continuously drips onto the Shivling (Tapkeshwar means "The one who drips").',
+                'Ram Rai Darbar Sahib: A historic Gurudwara built by Guru Ram Rai in the 17th century, which gave the city its name (Dehra meaning camp or abode).',
+                'Zonal Anthropological Museum: Provides insights into the origin and socio-cultural life of the Garhwal region\'s early inhabitants.',
+                'Local Bazaars: **Paltan Bazaar** (main city market for shopping) and **Tibetan Market** (known for artifacts, woolens, and souvenirs).'
+            ],
+            interestingThings: [
+                'Dehraduni Basmati Rice: Famous globally for its unique aroma and quality. Many local mills and shops offer the authentic variety.',
+                'Ellora’s Melting Moments: A legendary local bakery, a must-visit for their famous *Stick Jaw* toffees and baked goods.',
+                'Assan Barrage Bird Sanctuary: A wetland area (approx. 45km away) perfect for birdwatching, especially during the winter migration season.',
+                'Dehradun Zoo (Malsi Deer Park): A mini zoological park nestled in the foothills of the Shivalik range, ideal for families and nature lovers.'
+            ],
+            nearbyTreksAndAdventure: [
+                'George Everest Peak (near Mussoorie): Offers a short hike to the old house of Sir George Everest with panoramic views of the Doon Valley and the Himalayas.',
+                'Chakrata/Tiger Falls: Chakrata (approx. 90km) is a quiet cantonment town, and Tiger Falls is one of the highest direct waterfalls in Uttarakhand (near Chakrata).',
+                'Lachhiwala Nature Park: A serene, forested area along the banks of the Suswa River, popular for picnics and swimming in man-made water pools.',
+                'Nag Tibba Trek (Gateway): Dehradun often serves as the base for the popular weekend Nag Tibba Trek.'
+            ]
+        }
             },
             'haridwar': {
                 name: 'Haridwar',
-                img: 'https://images.unsplash.com/photo-1596706059483-363e14441589?auto=format&fit=crop&w=600&q=80',
+                img: 'https://lh3.googleusercontent.com/d/19kcwvinpldPo5T8dEgWD6QZaFXYA4cUd',
                 pop: '1.9 Mil',
                 temp: '25°C',
                 alt: '314m',
@@ -554,7 +991,7 @@
             },
             'pauri': { 
                 name: 'Pauri Garhwal', 
-                img: 'https://images.unsplash.com/photo-1594950949219-c0234a6549a0?auto=format&fit=crop&w=600&q=80', 
+                img: 'https://lh3.googleusercontent.com/d/1sBNvznjGTMyrHrpG2xsj29lgDVOJP0m9', 
                 pop: '0.6 Mil', 
                 temp: '16°C', 
                 alt: '1814m',
@@ -568,7 +1005,7 @@
             },
             'tehri': { 
                 name: 'Tehri Garhwal', 
-                img: 'https://images.unsplash.com/photo-1600041280388-34f3780c1039?auto=format&fit=crop&w=600&q=80', 
+                img: 'https://lh3.googleusercontent.com/d/1Pj1BN46o52s7Usmp5mK3m8eROEtpMahU', 
                 pop: '0.6 Mil', 
                 temp: '19°C', 
                 alt: '1750m',
@@ -582,7 +1019,7 @@
             },
             'uttarkashi': {
                 name: 'Uttarkashi',
-                img: 'https://images.unsplash.com/photo-1597841577771-460b1352f207?auto=format&fit=crop&w=600&q=80',
+                img: 'https://lh3.googleusercontent.com/d/1Pj1BN46o52s7Usmp5mK3m8eROEtpMahU',
                 pop: '0.3 Mil',
                 temp: '10°C',
                 alt: '1158m',
@@ -596,7 +1033,7 @@
             },
             'rudraprayag': { 
                 name: 'Rudraprayag', 
-                img: 'https://images.unsplash.com/photo-1632734138692-a1622345e691?auto=format&fit=crop&w=600&q=80', 
+                img: 'https://lh3.googleusercontent.com/d/1DSbUXtpQiUP_AEa7eLAW9DumrqHTasZd', 
                 pop: '0.2 Mil', 
                 temp: '5°C', 
                 alt: '895m',
@@ -610,7 +1047,7 @@
             },
             'chamoli': { 
                 name: 'Chamoli', 
-                img: 'https://images.unsplash.com/photo-1621303273752-6a7e089600d1?auto=format&fit=crop&w=600&q=80', 
+                img: 'https://lh3.googleusercontent.com/d/16ywECRvOo6fTZTqpehxf52oC6wyFfFEy', 
                 pop: '0.4 Mil', 
                 temp: '8°C', 
                 alt: '1300m+',
@@ -624,7 +1061,7 @@
             },
             'nainital': { 
                 name: 'Nainital', 
-                img: 'https://images.unsplash.com/photo-1563260840-02a8e8073574?auto=format&fit=crop&w=600&q=80', 
+                img: 'https://lh3.googleusercontent.com/d/1awiej5bUSAJ-AbMZ1_ClC5AOX_8jgbut', 
                 pop: '0.9 Mil', 
                 temp: '15°C', 
                 alt: '2084m',
@@ -638,7 +1075,7 @@
             },
             'almora': {
                 name: 'Almora',
-                img: 'https://images.unsplash.com/photo-1627962198424-6338b009e867?auto=format&fit=crop&w=600&q=80',
+                img: 'https://lh3.googleusercontent.com/d/1L6vpBLMtWY0xmxu1FuQMXy5mXX-rvC9k',
                 pop: '0.6 Mil',
                 temp: '17°C',
                 alt: '1638m',
@@ -652,7 +1089,7 @@
             },
             'bageshwar': { 
                 name: 'Bageshwar', 
-                img: 'https://images.unsplash.com/photo-1650893370396-8566b613e54b?auto=format&fit=crop&w=600&q=80', 
+                img: 'https://lh3.googleusercontent.com/d/1Yf25eJvN91eq_abilJ3wzUCdt0gVyWzm', 
                 pop: '0.2 Mil', 
                 temp: '18°C', 
                 alt: '1004m',
@@ -666,7 +1103,7 @@
             },
             'pithoragarh': {
                 name: 'Pithoragarh',
-                img: 'https://images.unsplash.com/photo-1622325988365-d06461c3d105?auto=format&fit=crop&w=600&q=80',
+                img: 'https://lh3.googleusercontent.com/d/1PjnLKxU7Dwau6E6yVPozwoAvUtjn3Kii',
                 pop: '0.5 Mil',
                 temp: '12°C',
                 alt: '1627m',
@@ -680,7 +1117,7 @@
             },
             'champawat': {
                 name: 'Champawat',
-                img: 'https://images.unsplash.com/photo-1616894038676-e13d56b0268c?auto=format&fit=crop&w=600&q=80',
+                img: 'https://lh3.googleusercontent.com/d/1grp1S8vSYl6BKnFCShW26twfyr-UAugo',
                 pop: '0.3 Mil',
                 temp: '20°C',
                 alt: '1615m',
@@ -694,7 +1131,7 @@
             },
             'us_nagar': {
                 name: 'Udham Singh Nagar',
-                img: 'https://images.unsplash.com/photo-1601666699318-7b9c9f41d91a?auto=format&fit=crop&w=600&q=80',
+                img: 'https://lh3.googleusercontent.com/d/1IrcT1t7Nw_rymnkOr9FZbFFfhaD_4HqI',
                 pop: '1.6 Mil',
                 temp: '27°C',
                 alt: '250m',
@@ -795,6 +1232,7 @@
             modal.classList.remove('hidden');
             setTimeout(() => {
                 setTimeout(() => modal.classList.remove('opacity-0'), 10);
+               
                 document.getElementById('ai-thinking').classList.add('hidden');
                 document.getElementById('ai-result').classList.remove('hidden');
             }, 1500);
@@ -838,6 +1276,50 @@
         function triggerRealCall(number) {
             showToast(`Dialing ${number}... GPS location transmitted.`);
             setTimeout(closeSOS, 1000); 
+        }
+
+        // FESTIVAL CALENDAR LOGIC
+        function openFestivalCalendar() {
+            const modal = document.getElementById('festival-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            renderFestivalMonths();
+        }
+        function closeFestivalCalendar() {
+            const modal = document.getElementById('festival-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+        function renderFestivalMonths() {
+            const container = document.getElementById('festival-months');
+            container.innerHTML = '';
+            const months = [
+                { name: 'Jan', events: ['Uttarayani Mela'] },
+                { name: 'Apr', events: ['Ram Navami Fairs'] },
+                { name: 'Aug', events: ['Nanda Devi Festival'] },
+                { name: 'Oct', events: ['Kumbh Mela'] },
+                { name: 'Nov', events: ['Dewali'] },
+                { name: 'Dec', events: ['Christmas'] },
+            ];
+            months.forEach(m => {
+                const div = document.createElement('div');
+                div.className = 'p-2 rounded-lg bg-gray-100 text-center cursor-pointer hover:bg-gray-200 transition';
+                div.innerHTML = `<span class="block text-sm font-bold text-alpine-dark">${m.name}</span>`;
+                div.onclick = () => openFestivalDetails(m.events);
+                container.appendChild(div);
+            });
+        }
+        function openFestivalDetails(events) {
+            const modalContent = document.getElementById('festival-modal-content');
+            modalContent.innerHTML = '';
+            events.forEach(event => {
+                const div = document.createElement('div');
+                div.className = 'p-3 bg-gray-50 rounded-lg shadow-sm mb-2';
+                div.innerHTML = `<p class="text-sm font-medium text-alpine-dark">${event}</p>`;
+                modalContent.appendChild(div);
+            });
+            document.getElementById('festival-modal-title').innerText = events.length > 0 ? events[0] : 'No Events';
+            openFestivalCalendar();
         }
 
         window.onload = () => {
