@@ -1,0 +1,850 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Devbhoomi Elite - 13 Districts Expanded</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Manrope', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        'alpine-dark': '#0f2c25', 
+                        'alpine-light': '#1a3c33',
+                        'gold-accent': '#d4af37', 
+                        'paper-bg': '#f8f9fa',
+                        'surface': '#ffffff',
+                        'eco-green': '#4ade80',
+                        'terracotta': '#e07a5f',
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(15, 44, 37, 0.1)',
+                        'float': '0 20px 40px -10px rgba(0,0,0,0.15)',
+                        'glow': '0 0 20px rgba(212, 175, 55, 0.2)',
+                        'ai-glow': '0 0 25px rgba(124, 58, 237, 0.25)',
+                    },
+                    backgroundImage: {
+                        'ai-gradient': 'linear-gradient(135deg, #0f2c25 0%, #2e1065 100%)',
+                        'food-gradient': 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)',
+                        'snow-gradient': 'linear-gradient(to top, #e0f2f1 0%, #ffffff 100%)',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.4s ease-out forwards',
+                        'slide-up': 'slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeIn: { from: { opacity: 0 }, to: { opacity: 1 } },
+                        slideUp: { from: { transform: 'translateY(20px)', opacity: 0 }, to: { transform: 'translateY(0)', opacity: 1 } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #f4f4f5;
+            -webkit-tap-highlight-color: transparent;
+            scrollbar-width: none;
+            font-family: 'Manrope', sans-serif;
+        }
+        body::-webkit-scrollbar { display: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .snap-x-mandatory { scroll-snap-type: x mandatory; }
+        .snap-center { scroll-snap-align: center; }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* Splash Screen */
+        #splash-screen { transition: opacity 0.8s ease-in-out, visibility 0.8s; }
+        #splash-screen.hidden-splash { opacity: 0; visibility: hidden; }
+
+        /* View Transitions */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .view-section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="text-gray-800 pb-24 antialiased bg-paper-bg overflow-hidden">
+
+    <!-- PREMIUM SPLASH SCREEN -->
+    <div id="splash-screen" class="fixed inset-0 z-[1000] bg-alpine-dark flex flex-col items-center justify-center text-white">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1920&q=80" alt="Himalayas" onerror="this.src='https://placehold.co/1920x1080/0f2c25/d4af37?text=Devbhoomi+Elite'" class="w-full h-full object-cover opacity-40">
+            <div class="absolute inset-0 bg-gradient-to-b from-alpine-dark/80 via-alpine-dark/60 to-alpine-dark"></div>
+        </div>
+        <div class="relative z-10 text-center p-8 animate-slide-up">
+            <div class="w-20 h-20 rounded-full border-2 border-gold-accent/30 flex items-center justify-center mx-auto mb-6 shadow-glow bg-alpine-dark/50 backdrop-blur-md">
+                <span class="text-4xl font-serif font-bold text-gold-accent">D</span>
+            </div>
+            <h1 class="text-4xl font-serif font-bold mb-2 text-white">Devbhoomi Elite</h1>
+            <p class="text-sm font-light text-gold-accent tracking-widest uppercase">The Abode of Gods</p>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="fixed top-0 inset-x-0 z-40 bg-white/90 backdrop-blur-md transition-shadow duration-300 shadow-sm" id="app-header">
+        <div class="max-w-md mx-auto px-5 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-alpine-dark text-gold-accent flex items-center justify-center text-base font-serif font-bold shadow-glow">D</div>
+                <div>
+                    <p class="text-[9px] text-gray-400 font-bold uppercase tracking-wider">Current Location</p>
+                    <h1 class="text-base font-bold text-alpine-dark leading-none">Dehradun <span class="text-xs font-normal text-gray-500">(700m)</span></h1>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-full">
+                    <i class="fas fa-cloud-sun text-gold-accent text-xs"></i>
+                    <span class="text-[10px] font-bold text-gray-600">21°C</span>
+                </div>
+                <button class="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 relative">
+                    <i class="far fa-bell"></i>
+                    <span class="absolute top-2 right-2.5 w-1.5 h-1.5 bg-gold-accent rounded-full"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: HOME DASHBOARD                     -->
+    <!-- ========================================== -->
+    <div id="view-home" class="view-section active max-w-md mx-auto pt-20 space-y-8 pb-10">
+        
+        <!-- 1. AI RECOMMENDATION SECTION -->
+        <div class="px-5 pt-2">
+            <div class="bg-ai-gradient rounded-3xl p-5 text-white shadow-ai-glow relative overflow-hidden cursor-pointer group" onclick="triggerAI()">
+                <div class="absolute top-0 right-0 p-4 opacity-30"><i class="fas fa-sparkles text-4xl"></i></div>
+                <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-500 rounded-full filter blur-[60px] opacity-30"></div>
+                
+                <div class="relative z-10">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">DevAI Beta</span>
+                        <i class="fas fa-bolt text-gold-accent text-xs animate-pulse"></i>
+                    </div>
+                    <h2 class="text-xl font-serif font-bold mb-1">Plan your yatra with AI</h2>
+                    <p class="text-xs text-gray-300 mb-4 max-w-[80%]">Personalized itineraries based on weather, crowds, and spiritual significance.</p>
+                    <button class="bg-white text-alpine-dark text-xs font-bold py-2.5 px-4 rounded-xl shadow-lg flex items-center gap-2 group-hover:scale-105 transition-transform">
+                        <i class="fas fa-magic text-purple-600"></i> Ask DevAI
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. ALPINE CONDITIONS / YATRA ADVISORY -->
+        <div class="px-5">
+            <h3 class="text-lg font-bold text-alpine-dark font-serif mb-3">Alpine Conditions</h3>
+            <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="text-center p-2 bg-snow-gradient rounded-xl border border-gray-50">
+                        <i class="fas fa-mountain text-xl text-alpine-dark mb-1"></i>
+                        <p class="text-xs font-bold text-alpine-dark">Avg. Altitude</p>
+                        <span class="text-sm font-bold text-gold-accent">2,800m</span>
+                    </div>
+                    <div class="text-center p-2 bg-green-50 rounded-xl border border-gray-50">
+                        <i class="fas fa-wind text-xl text-green-600 mb-1"></i>
+                        <p class="text-xs font-bold text-alpine-dark">Air Quality</p>
+                        <span class="text-sm font-bold text-eco-green">Excellent</span>
+                    </div>
+                    <div class="text-center p-2 bg-red-50 rounded-xl border border-gray-50">
+                        <i class="fas fa-traffic-light text-xl text-red-600 mb-1"></i>
+                        <p class="text-xs font-bold text-alpine-dark">Crowd Level</p>
+                        <span class="text-sm font-bold text-red-600">High</span>
+                    </div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-gray-100">
+                    <div class="flex items-center gap-2">
+                         <i class="fas fa-exclamation-circle text-terracotta text-sm"></i>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-terracotta">Yatra Advisory</span>
+                    </div>
+                    <p class="text-xs text-gray-600 mt-1">Char Dham Yatra routes are open. Heavy rain predicted in Chamoli district. Carry rain gear.</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 3. DISTRICT EXPLORER TEASER -->
+        <div class="pl-5">
+            <div class="flex justify-between items-center pr-5 mb-3">
+                <h3 class="text-lg font-bold text-alpine-dark font-serif">Explore 13 Districts</h3>
+                <button onclick="openDistrictExplorer()" class="text-xs font-bold text-gold-accent">View All <i class="fas fa-arrow-right ml-1"></i></button>
+            </div>
+            
+            <div class="flex gap-3 overflow-x-auto no-scrollbar snap-x-mandatory pr-5 pb-1">
+                <!-- District Teaser Cards -->
+                <button class="district-btn snap-center w-[160px] h-20 shrink-0 relative overflow-hidden rounded-xl shadow-md active:scale-[0.98] transition-transform" onclick="openDistrictExplorer()">
+                    <img src="https://images.unsplash.com/photo-1596489390231-10c7104764d1?auto=format&fit=crop&w=300&q=80" onerror="this.src='https://placehold.co/300x150/1a3c33/d4af37?text=DEHRADUN'" class="w-full h-full object-cover opacity-70">
+                    <div class="absolute inset-0 bg-alpine-dark/40 flex items-center justify-center">
+                        <span class="font-serif font-bold text-lg text-white drop-shadow-lg">Dehradun</span>
+                    </div>
+                </button>
+                <button class="district-btn snap-center w-[160px] h-20 shrink-0 relative overflow-hidden rounded-xl shadow-md active:scale-[0.98] transition-transform" onclick="openDistrictExplorer()">
+                    <img src="https://images.unsplash.com/photo-1563260840-02a8e8073574?auto=format&fit=crop&w=300&q=80" onerror="this.src='https://placehold.co/300x150/1a3c33/d4af37?text=NAINITAL'" class="w-full h-full object-cover opacity-70">
+                    <div class="absolute inset-0 bg-alpine-dark/40 flex items-center justify-center">
+                        <span class="font-serif font-bold text-lg text-white drop-shadow-lg">Nainital</span>
+                    </div>
+                </button>
+                <button class="district-btn snap-center w-[160px] h-20 shrink-0 relative overflow-hidden rounded-xl shadow-md active:scale-[0.98] transition-transform" onclick="openDistrictExplorer()">
+                    <div class="absolute inset-0 bg-alpine-light flex items-center justify-center">
+                        <span class="font-serif font-bold text-sm text-gold-accent drop-shadow-lg">Open List <i class="fas fa-th-list ml-1"></i></span>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- 4. KEY DESTINATIONS -->
+        <div class="px-5">
+            <h3 class="text-lg font-bold text-alpine-dark font-serif mb-4">Must-Visit Destinations</h3>
+            
+            <!-- Card 1: Kedarnath -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-4 flex gap-4 items-center cursor-pointer" onclick="openDetail('kedarnath')">
+                <img src="https://images.unsplash.com/photo-1632734138692-a1622345e691?auto=format&fit=crop&w=150&q=80" onerror="this.src='https://placehold.co/150x100/1a3c33/ffffff?text=KEDARNATH'" class="w-20 h-20 object-cover rounded-xl shrink-0">
+                <div class="flex-1">
+                    <h4 class="font-bold text-alpine-dark text-base">Kedarnath Temple</h4>
+                    <p class="text-xs text-gray-500 mb-2">3,583m • Rudraprayag</p>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-bold bg-terracotta/10 text-terracotta px-2 py-0.5 rounded-full">Pilgrimage</span>
+                        <span class="text-[10px] font-bold bg-gold-accent/10 text-gold-accent px-2 py-0.5 rounded-full">High Alt</span>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+            </div>
+
+            <!-- Card 2: Haridwar -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-4 flex gap-4 items-center cursor-pointer" onclick="openDetail('haridwar')">
+                <img src="https://images.unsplash.com/photo-1596706059483-363e14441589?auto=format&fit=crop&w=150&q=80" onerror="this.src='https://placehold.co/150x100/1a3c33/ffffff?text=HARIDWAR'" class="w-20 h-20 object-cover rounded-xl shrink-0">
+                <div class="flex-1">
+                    <h4 class="font-bold text-alpine-dark text-base">Har Ki Pauri</h4>
+                    <p class="text-xs text-gray-500 mb-2">294m • Haridwar</p>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-bold bg-blue-50/50 text-blue-600 px-2 py-0.5 rounded-full">Ganga Aarti</span>
+                        <span class="text-[10px] font-bold bg-green-50/50 text-green-600 px-2 py-0.5 rounded-full">City Access</span>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+            </div>
+        </div>
+
+        <!-- 5. TASTE OF HIMALAYAS -->
+        <div>
+            <div class="px-5 flex justify-between items-center mb-4 mt-8">
+                <h3 class="text-lg font-bold text-alpine-dark font-serif">Taste of Himalayas <i class="fas fa-utensils text-xs text-terracotta ml-1"></i></h3>
+            </div>
+            <div class="pl-5 overflow-x-auto snap-x-mandatory no-scrollbar flex gap-4 pb-4">
+                <!-- Food 1 -->
+                <div class="w-[160px] h-[200px] shrink-0 snap-center rounded-2xl relative overflow-hidden cursor-pointer group">
+                    <img src="https://images.unsplash.com/photo-1606491956689-2ea28c67445c?auto=format&fit=crop&w=400&q=80" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Bal+Mithai'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-food-gradient"></div>
+                    <div class="absolute bottom-3 left-3 text-white">
+                        <p class="text-xs font-bold text-terracotta uppercase mb-1">Sweet</p>
+                        <h4 class="font-serif font-bold text-lg leading-none">Bal Mithai</h4>
+                    </div>
+                </div>
+                <!-- Food 2 -->
+                <div class="w-[160px] h-[200px] shrink-0 snap-center rounded-2xl relative overflow-hidden cursor-pointer group">
+                    <img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=fit&w=400&q=80" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Kafuli'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-food-gradient"></div>
+                    <div class="absolute bottom-3 left-3 text-white">
+                        <p class="text-xs font-bold text-terracotta uppercase mb-1">Savory</p>
+                        <h4 class="font-serif font-bold text-lg leading-none">Kafuli</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEWS 2, 3, 4 (Preserved) -->
+    <div id="view-map" class="view-section max-w-md mx-auto h-screen bg-white hidden relative">
+        <div class="absolute top-24 left-5 right-5 z-10 bg-white/95 backdrop-blur-md rounded-2xl shadow-lg p-1 border border-gray-100 flex">
+            <button class="flex-1 py-2.5 rounded-xl text-xs font-bold text-white bg-alpine-dark shadow-sm">Online Map</button>
+            <button class="flex-1 py-2.5 rounded-xl text-xs font-bold text-gray-500" onclick="showToast('Available in Offline Mode')">Offline Areas</button>
+        </div>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3444.6279593582275!2d78.0322!3d30.3165!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390929c356c888af%3A0x4c3562c032518799!2sDehradun!5e0!3m2!1sfr!2sin" width="100%" height="100%" style="border:0;" loading="lazy" class="pt-20"></iframe>
+    </div>
+
+    <div id="view-pass" class="view-section max-w-md mx-auto pt-28 px-5 hidden min-h-screen bg-alpine-dark text-white text-center">
+        <h2 class="text-3xl font-serif font-bold mb-2 text-gold-accent">Digital Pass</h2>
+        <p class="text-sm opacity-70 mb-10">Official Yatra Document</p>
+        <div class="bg-white text-gray-900 rounded-[32px] p-8 shadow-2xl relative">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=Devbhoomi-Verified-JT12345" class="mx-auto rounded-lg mix-blend-multiply mb-4">
+            <h3 class="text-2xl font-bold font-serif">John Traveller (JT12345)</h3>
+            <p class="text-green-600 font-bold text-sm mt-2 mb-6"><i class="fas fa-check-circle"></i> Verified Active</p>
+            <div class="w-full bg-gray-100 text-alpine-dark font-bold text-sm py-3 rounded-xl flex justify-center items-center">
+                <i class="fas fa-id-card mr-2"></i> Pass ID: <span class="ml-1 text-gold-accent">UK-2024-5834</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-profile" class="view-section max-w-md mx-auto pt-24 px-5 hidden min-h-screen bg-paper-bg">
+        <div class="text-center mb-8">
+            <div class="w-24 h-24 rounded-full border-4 border-white shadow-lg mx-auto mb-3 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/200x200/cccccc/0f2c25?text=JT'">
+            </div>
+            <h2 class="text-2xl font-serif font-bold text-alpine-dark">John Traveller</h2>
+            <p class="text-sm text-gray-500">Explorer Member • Joined 2023</p>
+        </div>
+        <div class="grid grid-cols-3 gap-3 mb-6">
+            <div class="bg-white p-4 rounded-2xl shadow-sm text-center">
+                <h3 class="text-2xl font-bold text-gold-accent">12</h3>
+                <p class="text-xs text-gray-400 font-bold uppercase">Yatras</p>
+            </div>
+            <div class="bg-white p-4 rounded-2xl shadow-sm text-center">
+                <h3 class="text-2xl font-bold text-eco-green"><i class="fas fa-leaf"></i></h3>
+                <p class="text-xs text-gray-400 font-bold uppercase">Eco Badge</p>
+            </div>
+            <div class="bg-white p-4 rounded-2xl shadow-sm text-center">
+                <h3 class="text-2xl font-bold text-terracotta">24k</h3>
+                <p class="text-xs text-gray-400 font-bold uppercase">Steps Avg</p>
+            </div>
+        </div>
+        <div class="space-y-3">
+            <button class="w-full bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center active:bg-gray-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-alpine-light/10 text-alpine-dark flex items-center justify-center"><i class="fas fa-download"></i></div>
+                    <span class="font-bold text-sm text-alpine-dark">Offline Maps</span>
+                </div>
+                <i class="fas fa-chevron-right text-xs text-gray-300"></i>
+            </button>
+             <button class="w-full bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center active:bg-gray-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-alpine-light/10 text-alpine-dark flex items-center justify-center"><i class="fas fa-user-shield"></i></div>
+                    <span class="font-bold text-sm text-alpine-dark">Safety Settings</span>
+                </div>
+                <i class="fas fa-chevron-right text-xs text-gray-300"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="fixed bottom-0 inset-x-0 glass-panel z-50 pb-safe pt-3 shadow-glass">
+        <div class="max-w-md mx-auto flex justify-around items-center h-16 px-2">
+            <button class="nav-item active-nav text-alpine-dark flex flex-col items-center gap-1.5 p-2 active:scale-95" onclick="switchView('home', this)">
+                <i class="fas fa-compass text-xl"></i>
+                <span class="text-[9px] font-bold tracking-widest">EXPLORE</span>
+            </button>
+            <button class="nav-item text-gray-400 flex flex-col items-center gap-1.5 p-2 active:scale-95 hover:text-gray-600" onclick="switchView('map', this)">
+                <i class="fas fa-map text-xl"></i>
+                <span class="text-[9px] font-bold tracking-widest">MAPS</span>
+            </button>
+            <button class="relative -top-6 bg-red-600 text-white w-16 h-16 rounded-full shadow-glow flex items-center justify-center text-2xl border-[5px] border-white active:scale-90 animate-pulse-slow" onclick="showSOS()">
+                <i class="fas fa-shield-alt"></i>
+            </button>
+            <button class="nav-item text-gray-400 flex flex-col items-center gap-1.5 p-2 active:scale-95 hover:text-gray-600" onclick="switchView('pass', this)">
+                <i class="fas fa-ticket-alt text-xl"></i>
+                <span class="text-[9px] font-bold tracking-widest">PASS</span>
+            </button>
+            <button class="nav-item text-gray-400 flex flex-col items-center gap-1.5 p-2 active:scale-95 hover:text-gray-600" onclick="switchView('profile', this)">
+                <i class="far fa-user-circle text-xl"></i>
+                <span class="text-[9px] font-bold tracking-widest">PROFILE</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- NEW MODAL: DISTRICT EXPLORER (Full Screen) -->
+    <!-- ========================================== -->
+    <div id="district-explorer-modal" class="fixed inset-0 bg-paper-bg z-[100] transform translate-x-full transition-transform duration-500 flex flex-col max-w-md mx-auto">
+        <header class="pt-6 pb-3 px-5 flex items-center justify-between shadow-sm bg-white border-b border-gray-100 sticky top-0 z-20">
+            <button onclick="closeDistrictExplorer()" class="text-alpine-dark w-8 h-8 flex items-center justify-center"><i class="fas fa-times text-xl"></i></button>
+            <h2 class="text-xl font-serif font-bold text-alpine-dark">Uttarakhand Districts (13)</h2>
+            <div class="w-8"></div>
+        </header>
+
+        <!-- DISTRICT LIST VIEW -->
+        <div id="district-list-view" class="flex-1 overflow-y-auto p-5 space-y-4">
+            <!-- Dynamic Content -->
+        </div>
+
+        <!-- DISTRICT DETAIL VIEW (Slides in from right) -->
+        <div id="district-detail-view" class="absolute inset-0 bg-white transform translate-x-full transition-transform duration-300 flex flex-col z-30">
+            <div class="relative h-[35vh] shrink-0">
+                <img id="d-detail-img" src="" onerror="this.src='https://placehold.co/600x400/1a3c33/d4af37?text=District+Hero'" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                <button onclick="closeDistrictDetail()" class="absolute top-6 left-5 w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white border border-white/20"><i class="fas fa-arrow-left"></i></button>
+                <div class="absolute bottom-4 left-5 right-5">
+                     <h2 id="d-detail-name" class="text-3xl font-serif font-bold text-white drop-shadow-md">District Name</h2>
+                     <div class="flex items-center gap-3 mt-1">
+                        <span id="d-detail-pop" class="text-[10px] font-bold bg-white/20 backdrop-blur-md text-white px-2 py-0.5 rounded-full border border-white/10">-- Pop.</span>
+                        <span id="d-detail-alt" class="text-[10px] font-bold bg-white/20 backdrop-blur-md text-white px-2 py-0.5 rounded-full border border-white/10">-- Alt</span>
+                     </div>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-6 space-y-6 pb-24">
+                <p id="d-detail-desc" class="text-sm text-gray-600 leading-relaxed font-medium"></p>
+
+                <!-- Quick Stats Row -->
+                <div class="flex gap-3">
+                     <div class="flex-1 bg-gray-50 p-3 rounded-xl border border-gray-100 text-center">
+                        <p class="text-xs text-gray-400">Avg Temp</p>
+                        <p id="d-detail-temp" class="font-bold text-alpine-dark">--</p>
+                     </div>
+                     <div class="flex-1 bg-gray-50 p-3 rounded-xl border border-gray-100 text-center">
+                        <p class="text-xs text-gray-400">Rainfall</p>
+                        <p class="font-bold text-alpine-dark">Moderate</p>
+                     </div>
+                </div>
+
+                <!-- New Section: Cultural Insights -->
+                <div>
+                    <h3 class="font-bold text-alpine-dark text-lg mb-3 flex items-center gap-2"><i class="fas fa-music text-terracotta"></i> Cultural Vibe</h3>
+                    <div class="p-4 bg-orange-50 rounded-2xl border border-orange-100">
+                        <p id="d-detail-culture" class="text-xs text-gray-700 leading-relaxed">--</p>
+                    </div>
+                </div>
+
+                <!-- New Section: Logistics/Bookings -->
+                <div>
+                    <h3 class="font-bold text-alpine-dark text-lg mb-3 flex items-center gap-2"><i class="fas fa-plane-departure text-alpine-light"></i> Logistics Hub</h3>
+                    <div class="p-4 bg-blue-50 rounded-2xl border border-blue-100">
+                        <p id="d-detail-logistics" class="text-xs text-gray-700 leading-relaxed">--</p>
+                        <button class="mt-3 w-full py-2 bg-white border border-blue-200 text-blue-700 font-bold text-xs rounded-lg shadow-sm" onclick="showToast('Searching transport options...')">Check Availability</button>
+                    </div>
+                </div>
+
+                <!-- Primary Attraction -->
+                <div>
+                    <h3 class="font-bold text-alpine-dark text-lg mb-2">Must See</h3>
+                    <div class="p-4 bg-alpine-dark/5 rounded-xl border border-alpine-dark/10 flex items-center gap-3">
+                        <i class="fas fa-camera text-2xl text-alpine-dark"></i>
+                        <div>
+                             <span id="d-detail-attr" class="font-bold text-sm text-alpine-dark block">--</span>
+                             <span class="text-[10px] text-gray-500">Top rated tourist spot</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Did You Know -->
+                <div class="p-4 bg-yellow-50 rounded-xl border border-yellow-100 flex gap-3">
+                    <i class="fas fa-lightbulb text-gold-accent text-xl shrink-0 mt-1"></i>
+                    <div>
+                        <h4 class="font-bold text-xs text-gold-accent uppercase mb-1">Did You Know?</h4>
+                        <p id="d-detail-fact" class="text-xs text-gray-600 italic">--</p>
+                    </div>
+                </div>
+
+                <!-- Travel Advisory -->
+                <div class="p-4 bg-red-50 rounded-xl border border-red-100">
+                    <h3 class="font-bold text-red-600 text-xs uppercase mb-1"><i class="fas fa-exclamation-triangle mr-1"></i> Advisory</h3>
+                    <p id="d-detail-advice" class="text-xs text-gray-700 leading-relaxed"></p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- AI MODAL & SOS MODAL (Preserved) -->
+    <div id="ai-modal" class="fixed inset-0 z-[2000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-5 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-sm rounded-[32px] p-6 text-center relative overflow-hidden">
+            <button onclick="closeAI()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
+            <div id="ai-thinking" class="py-10">
+                <div class="w-16 h-16 mx-auto bg-purple-100 rounded-full flex items-center justify-center text-purple-600 text-2xl mb-4 animate-pulse"><i class="fas fa-brain"></i></div>
+                <h3 class="text-xl font-bold text-alpine-dark mb-2">DevAI is thinking...</h3>
+            </div>
+             <div id="ai-result" class="hidden text-left">
+                <div class="flex items-center gap-2 mb-4"><i class="fas fa-sparkles text-gold-accent"></i><span class="text-xs font-bold uppercase tracking-wider text-purple-600">Top Recommendation</span></div>
+                <div class="relative h-40 rounded-2xl overflow-hidden mb-4"><img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover"><div class="absolute bottom-0 left-0 p-3 bg-gradient-to-t from-black/80 to-transparent w-full"><h4 class="text-white font-bold text-lg">Tungnath Trek</h4></div></div>
+                <p class="text-sm text-gray-600 mb-4 leading-relaxed">We recommend <strong>Tungnath</strong> today. Perfect visibility.</p>
+                <button class="w-full bg-alpine-dark text-white py-3 rounded-xl font-bold text-sm" onclick="openDetail('chopta'); closeAI()">View Details</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="sos-modal" class="fixed inset-0 z-[3000] bg-red-600/95 backdrop-blur-sm flex items-center justify-center p-6 hidden opacity-0 transition-opacity duration-300">
+        <div id="sos-step-1" class="bg-white w-full max-w-xs rounded-[32px] p-8 text-center shadow-2xl transform scale-95 transition-all">
+            <div class="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center text-4xl text-red-600 mx-auto mb-6 animate-pulse border-4 border-red-100"><i class="fas fa-exclamation-triangle"></i></div>
+            <h2 class="text-3xl font-bold text-gray-900 font-serif mb-2">Emergency?</h2>
+            <p class="text-gray-500 text-sm font-medium mb-8 leading-relaxed">Share live location with Uttarakhand Police?</p>
+            <button onclick="confirmSOS()" class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold text-lg shadow-lg mb-3">Proceed to Call</button>
+            <button onclick="closeSOS()" class="w-full bg-white text-gray-700 py-4 rounded-2xl font-bold text-lg border border-gray-200">Cancel</button>
+        </div>
+        <div id="sos-step-2" class="bg-white w-full max-w-xs rounded-[32px] p-8 text-center shadow-2xl transform scale-95 transition-all hidden">
+            <h2 class="text-2xl font-bold text-red-600 mb-4">Confirm Dial</h2>
+            <button onclick="triggerRealCall('112')" class="w-full bg-red-600 text-white py-3 rounded-xl font-bold mb-3">DIAL 112 NOW</button>
+            <button onclick="closeSOS()" class="w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-bold">No, Go Back</button>
+        </div>
+    </div>
+    
+    <!-- DETAIL MODAL -->
+    <div id="detail-modal" class="fixed inset-0 bg-white z-[60] transform translate-y-full transition-transform duration-500 flex flex-col">
+        <div class="relative h-[45vh] shrink-0">
+            <img id="detail-img" src="" class="w-full h-full object-cover">
+            <button onclick="closeDetail()" class="absolute top-6 left-5 w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white border border-white/20"><i class="fas fa-arrow-left"></i></button>
+        </div>
+        <div class="flex-1 bg-white -mt-10 rounded-t-[32px] relative px-6 pt-8 overflow-y-auto pb-24 no-scrollbar z-10">
+            <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto absolute top-3 left-1/2 -translate-x-1/2"></div>
+            <h2 id="detail-title" class="text-3xl font-serif font-bold text-alpine-dark leading-tight mb-1">Location</h2>
+            <p class="text-sm text-gray-500 mb-4" id="detail-loc">District</p>
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <div class="bg-gray-50 p-4 rounded-xl"><p class="text-xs text-gray-500">Start</p><span class="font-bold text-sm text-alpine-dark" id="detail-start">--</span></div>
+                <div class="bg-gray-50 p-4 rounded-xl"><p class="text-xs text-gray-500">Distance</p><span class="font-bold text-sm text-alpine-dark" id="detail-dist">--</span></div>
+                <div class="bg-gray-50 p-4 rounded-xl"><p class="text-xs text-gray-500">Elevation</p><span class="font-bold text-sm text-alpine-dark" id="detail-gain">--</span></div>
+                <div class="bg-gray-50 p-4 rounded-xl"><p class="text-xs text-gray-500">Duration</p><span class="font-bold text-sm text-alpine-dark" id="detail-days">--</span></div>
+            </div>
+            <div class="absolute bottom-0 inset-x-0 p-5 bg-white/90 backdrop-blur-md border-t border-gray-100 z-20">
+                <button class="w-full py-4 bg-alpine-dark text-white font-bold rounded-2xl shadow-lg" onclick="showToast('Booking Initiated')">Book Guided Tour</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 bg-alpine-dark/95 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-2xl text-xs font-bold z-[4000] opacity-0 pointer-events-none transition-all duration-300 translate-y-[-20px] flex items-center gap-2">
+        <i class="fas fa-info-circle text-gold-accent"></i> <span id="toast-msg">Notification</span>
+    </div>
+
+    <script>
+        // DATA MODELS - PLACES
+        const places = {
+            'rishikesh': { title: 'Rishikesh', district: 'Dehradun', img: 'https://images.unsplash.com/photo-1567878155218-c5b0580c6972?auto=format&fit=crop&w=600&q=80', start: 'Laxman Jhula', dist: '5 km', gain: '0 m', days: '1 Day' },
+            'chopta': { title: 'Tungnath Trek (Chopta)', district: 'Rudraprayag', img: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=600&q=80', start: 'Chopta', dist: '3.5 km', gain: '800 m', days: '1 Day' },
+            'kedarnath': { title: 'Kedarnath Temple', district: 'Rudraprayag', img: 'https://images.unsplash.com/photo-1632734138692-a1622345e691?auto=format&fit=crop&w=600&q=80', start: 'Gaurikund', dist: '18 km', gain: '1,800 m', days: '2 Days' },
+            'haridwar': { title: 'Har Ki Pauri', district: 'Haridwar', img: 'https://images.unsplash.com/photo-1596706059483-363e14441589?auto=format&fit=crop&w=600&q=80', start: 'Main Ghat', dist: '0 km', gain: '0 m', days: '1 Day' },
+        };
+
+        // DATA MODELS - ALL 13 DISTRICTS (MASSIVE DETAIL)
+        const districts = {
+            'dehradun': { 
+                name: 'Dehradun', 
+                img: 'https://images.unsplash.com/photo-1596489390231-10c7104764d1?auto=format&fit=crop&w=600&q=80', 
+                pop: '1.7 Mil', 
+                temp: '22°C', 
+                alt: '700m', 
+                attr: 'Robber\'s Cave & FRI',
+                desc: 'The winter capital and educational hub of Uttarakhand. Nestled in the Doon Valley, it offers a blend of city life, heritage institutions like FRI, and proximity to Mussoorie.',
+                advice: 'Heavy traffic in city center. Visit FRI early morning.',
+                culture: 'Cosmopolitan vibe with strong Garhwali roots. Famous for "Dehraduni Basmati" rice and Stick Jaw toffees. Major festivals: Jhanda Mela, Tapkeshwar Fair.',
+                logistics: 'Fly to Jolly Grant Airport (30km). Connected by Shatabdi train from Delhi. Local travel via auto-rickshaw or Smart City buses.',
+                fact: 'Dehradun is known as the "City of Love" and is home to the prestigious Indian Military Academy (IMA).',
+                id: 'dehradun'
+            },
+            'haridwar': {
+                name: 'Haridwar',
+                img: 'https://images.unsplash.com/photo-1596706059483-363e14441589?auto=format&fit=crop&w=600&q=80',
+                pop: '1.9 Mil',
+                temp: '25°C',
+                alt: '314m',
+                attr: 'Har Ki Pauri & Ganga Aarti',
+                desc: 'One of the seven holiest places in Hinduism. It is where the River Ganga enters the Indo-Gangetic plains. Famous for the evening Aarti and Kumbh Mela.',
+                advice: 'Crowded during evenings. Remove shoes before entering ghats.',
+                culture: 'Strictly vegetarian and alcohol-free city. Famous for street food like Aloo Puri and Kachori near the ghats. Kanwar Yatra is massive here.',
+                logistics: 'Direct trains from all major Indian cities. 200km drive from Delhi via NH334. Nearest airport is Dehradun (40km).',
+                fact: 'It is one of only four places in India that hosts the massive Kumbh Mela every 12 years.',
+                id: 'haridwar'
+            },
+            'pauri': { 
+                name: 'Pauri Garhwal', 
+                img: 'https://images.unsplash.com/photo-1594950949219-c0234a6549a0?auto=format&fit=crop&w=600&q=80', 
+                pop: '0.6 Mil', 
+                temp: '16°C', 
+                alt: '1814m',
+                attr: 'Lansdowne & Kandoliya',
+                desc: 'Known for its stunning panoramic view of the snow-capped Himalayan peaks like Chaukhamba. It is a quiet, scenic district with dense pine forests.',
+                advice: 'Carry motion sickness meds for winding roads.',
+                culture: 'Deeply traditional Garhwali culture. Famous for "Singori" sweet wrapped in Maalu leaves. Celebrate the "Gindi Mela".',
+                logistics: 'Drive from Kotdwar (railhead). Pauri town is 150km from Dehradun. Taxis are best for exploring Lansdowne.',
+                fact: 'Lansdowne is one of the quietest hill stations in India, maintained by the Garhwal Rifles regiment.',
+                id: 'pauri'
+            },
+            'tehri': { 
+                name: 'Tehri Garhwal', 
+                img: 'https://images.unsplash.com/photo-1600041280388-34f3780c1039?auto=format&fit=crop&w=600&q=80', 
+                pop: '0.6 Mil', 
+                temp: '19°C', 
+                alt: '1750m',
+                attr: 'Tehri Lake & Water Sports',
+                desc: 'Home to the massive Tehri Dam and reservoir. It is becoming the adventure capital for jet skiing, boating, and floating huts. Old Tehri is submerged underwater.',
+                advice: 'Water sports depend on weather. Book floating huts in advance.',
+                culture: 'Hosts the "Tehri Lake Festival" showcasing culture and adventure. Local cuisine includes "Gahat ki Dal".',
+                logistics: 'Reach Rishikesh first, then 2.5hr drive to Tehri. New Tehri is the district HQ.',
+                fact: 'The Old Tehri town lies completely submerged beneath the waters of the Bhagirathi river due to the dam.',
+                id: 'tehri'
+            },
+            'uttarkashi': {
+                name: 'Uttarkashi',
+                img: 'https://images.unsplash.com/photo-1597841577771-460b1352f207?auto=format&fit=crop&w=600&q=80',
+                pop: '0.3 Mil',
+                temp: '10°C',
+                alt: '1158m',
+                attr: 'Gangotri & Yamunotri',
+                desc: 'Meaning "Kashi of the North", it houses two Char Dham shrines. It is a hub for mountaineers (NIM) and apple orchards.',
+                advice: 'Heavy woolens required. Roads prone to landslides in monsoon.',
+                culture: 'Home to the Nehru Institute of Mountaineering. Magh Mela is a major event. People engage in wool weaving.',
+                logistics: 'Accessible via road from Rishikesh (170km) or Dehradun. No direct train or flight.',
+                fact: 'The district shares a border with Tibet and Himachal Pradesh. Harsil valley here is famous for "Wilson Apples".',
+                id: 'uttarkashi'
+            },
+            'rudraprayag': { 
+                name: 'Rudraprayag', 
+                img: 'https://images.unsplash.com/photo-1632734138692-a1622345e691?auto=format&fit=crop&w=600&q=80', 
+                pop: '0.2 Mil', 
+                temp: '5°C', 
+                alt: '895m',
+                attr: 'Kedarnath & Tungnath',
+                desc: 'Named after the confluence of Alaknanda and Mandakini. It is the heart of the Kedarnath yatra and Panch Kedar trek routes.',
+                advice: 'Register for Yatra early. Helicopter booking opens months prior.',
+                culture: 'Deeply spiritual. The entire economy revolves around the Yatra season. Locals are expert trekkers and guides.',
+                logistics: 'Base is Rishikesh. Shared jeeps available to Sonprayag. Trek starts from Gaurikund.',
+                fact: 'It was once the hunting ground of the famous man-eating leopard of Rudraprayag, hunted by Jim Corbett.',
+                id: 'rudraprayag'
+            },
+            'chamoli': { 
+                name: 'Chamoli', 
+                img: 'https://images.unsplash.com/photo-1621303273752-6a7e089600d1?auto=format&fit=crop&w=600&q=80', 
+                pop: '0.4 Mil', 
+                temp: '8°C', 
+                alt: '1300m+',
+                attr: 'Badrinath & Valley of Flowers',
+                desc: 'The district of flowers and glaciers. Home to the holy Badrinath temple, Hemkund Sahib, and the ski slopes of Auli.',
+                advice: 'Auli is best for skiing in Jan-Feb. VoF opens in July.',
+                culture: 'Birthplace of the "Chipko Movement" (forest conservation). Bhotia tribes inhabit the border areas like Mana.',
+                logistics: 'Long drive from Rishikesh (9-10 hrs). Nearest airport Dehradun. Joshimath is the main hub.',
+                fact: 'Mana Village in Chamoli was historically called the "Last Village of India" before the border.',
+                id: 'chamoli'
+            },
+            'nainital': { 
+                name: 'Nainital', 
+                img: 'https://images.unsplash.com/photo-1563260840-02a8e8073574?auto=format&fit=crop&w=600&q=80', 
+                pop: '0.9 Mil', 
+                temp: '15°C', 
+                alt: '2084m',
+                attr: 'Naini Lake & Zoo',
+                desc: 'The Lake District of India. Famous for its eye-shaped lake, colonial heritage, and pleasant weather. Gateway to Kumaon.',
+                advice: 'Parking is scarce. Use the shuttle service from parking grounds.',
+                culture: 'Kumaoni culture dominant. Famous for decorative candles and wooden crafts. Nanda Devi fair is huge.',
+                logistics: 'Nearest train station is Kathgodam (35km). Direct connectivity to Delhi. Taxis readily available.',
+                fact: 'The town was founded by a British sugar merchant, P. Barron, in 1841.',
+                id: 'nainital'
+            },
+            'almora': {
+                name: 'Almora',
+                img: 'https://images.unsplash.com/photo-1627962198424-6338b009e867?auto=format&fit=crop&w=600&q=80',
+                pop: '0.6 Mil',
+                temp: '17°C',
+                alt: '1638m',
+                attr: 'Kasar Devi & Binsar',
+                desc: 'The cultural capital of Kumaon. Situated on a horseshoe-shaped ridge. Famous for its rich history, temples, and lack of colonial influence.',
+                advice: 'Roads are narrow in the market. Walk to enjoy the heritage.',
+                culture: 'Famous for "Bal Mithai" (brown fudge) and "Singauri". The Nanda Devi festival is celebrated with grandeur.',
+                logistics: '90km from Kathgodam railway station. Shared taxis are the lifeline.',
+                fact: 'Kasar Devi temple in Almora is located on the Van Allen Belt, believed to have special cosmic energy.',
+                id: 'almora'
+            },
+            'bageshwar': { 
+                name: 'Bageshwar', 
+                img: 'https://images.unsplash.com/photo-1650893370396-8566b613e54b?auto=format&fit=crop&w=600&q=80', 
+                pop: '0.2 Mil', 
+                temp: '18°C', 
+                alt: '1004m',
+                attr: 'Bagnath Temple & Pindari Glacier',
+                desc: 'Located at the confluence of Saryu and Gomti rivers. It is the base for treks to Pindari, Kafni, and Sunderdhunga glaciers.',
+                advice: 'Carry cash, ATMs are limited in upper reaches.',
+                culture: 'Hosts the historic "Uttarayani Mela" in January (Makar Sankranti). Hub of Kumaoni folk songs.',
+                logistics: 'Reach via Almora or Takula. 5-6 hours drive from Kathgodam.',
+                fact: 'According to legend, Lord Shiva visited here in the form of a tiger (Bagh), hence the name Bageshwar.',
+                id: 'bageshwar'
+            },
+            'pithoragarh': {
+                name: 'Pithoragarh',
+                img: 'https://images.unsplash.com/photo-1622325988365-d06461c3d105?auto=format&fit=crop&w=600&q=80',
+                pop: '0.5 Mil',
+                temp: '12°C',
+                alt: '1627m',
+                attr: 'Munsiyari & Adi Kailash',
+                desc: 'Known as "Little Kashmir". It borders Nepal and Tibet. Famous for the Soar Valley and views of Panchachuli peaks.',
+                advice: 'Inner Line Permit required for some border areas like Milam Glacier.',
+                culture: 'Unique "Shauka" tribal culture in upper valleys. Famous for woolen shawls and rugs.',
+                logistics: 'Very far from plains. 10+ hours drive from Kathgodam. Has a small airstrip (Naini Saini) with occasional flights.',
+                fact: 'It serves as the gateway for the Kailash Mansarovar Yatra route through Lipulekh Pass.',
+                id: 'pithoragarh'
+            },
+            'champawat': {
+                name: 'Champawat',
+                img: 'https://images.unsplash.com/photo-1616894038676-e13d56b0268c?auto=format&fit=crop&w=600&q=80',
+                pop: '0.3 Mil',
+                temp: '20°C',
+                alt: '1615m',
+                attr: 'Baleshwar Temple & Lohaghat',
+                desc: 'The ancient capital of the Chand dynasty. It offers a mix of history, architecture, and untouched nature.',
+                advice: 'Ideal for history buffs and solitude seekers.',
+                culture: 'Rich in folklore. The "Bagwal" stone-pelting festival (Devidhura) is unique to this district.',
+                logistics: '75km from Tanakpur railway station. Connected via majestic roads through teak forests.',
+                fact: 'The "Champawat Tiger", a man-eater that killed 436 people, was hunted here by Jim Corbett.',
+                id: 'champawat'
+            },
+            'us_nagar': {
+                name: 'Udham Singh Nagar',
+                img: 'https://images.unsplash.com/photo-1601666699318-7b9c9f41d91a?auto=format&fit=crop&w=600&q=80',
+                pop: '1.6 Mil',
+                temp: '27°C',
+                alt: '250m',
+                attr: 'Nanakmatta Sahib & Pantnagar',
+                desc: 'The agricultural bowl of Uttarakhand (Terai region). It is an industrial hub and home to significant Sikh pilgrimage sites.',
+                advice: 'Hot summers. Best visited in winter.',
+                culture: 'Mini Punjab of Uttarakhand. Vibrant rural life, large farms, and Gurudwaras.',
+                logistics: 'Pantnagar Airport (PGH) is here. Well connected by train to Delhi/Lucknow.',
+                fact: 'It is named after freedom fighter Udham Singh. It is home to India\'s first agricultural university (Pantnagar).',
+                id: 'us_nagar'
+            }
+        };
+
+        // LOGIC - VIEW SWITCHING
+        function switchView(id, btn) {
+            document.querySelectorAll('.view-section').forEach(x => x.classList.remove('active'));
+            document.getElementById(`view-${id}`).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(x => { 
+                x.classList.remove('active-nav');
+                x.classList.remove('text-alpine-dark');
+                x.classList.add('text-gray-400');
+            });
+            btn.classList.add('active-nav', 'text-alpine-dark');
+            btn.classList.remove('text-gray-400');
+            closeSOS();
+            closeDistrictExplorer();
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            t.classList.remove('opacity-0', 'translate-y-[-20px]');
+            setTimeout(() => t.classList.add('opacity-0', 'translate-y-[-20px]'), 3000);
+        }
+
+        // LOGIC - DISTRICT EXPLORER
+        function renderDistrictList() {
+            const listContainer = document.getElementById('district-list-view');
+            let html = '<p class="text-sm text-gray-500 mb-4">Select a district to view rich details including culture and logistics.</p>';
+            for (const key in districts) {
+                const d = districts[key];
+                html += `
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex gap-4 items-center cursor-pointer active:bg-gray-50" onclick="openDistrictDetail('${key}')">
+                        <img src="${d.img}" onerror="this.src='https://placehold.co/100x80/1a3c33/ffffff?text=${d.name.substring(0,3)}'" class="w-20 h-20 object-cover rounded-xl shrink-0">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-alpine-dark text-base">${d.name}</h4>
+                            <p class="text-xs text-gray-500 mb-2 line-clamp-1">${d.attr}</p>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-bold bg-gold-accent/10 text-gold-accent px-2 py-0.5 rounded-full">Visit</span>
+                                <span class="text-[10px] font-bold bg-green-50/50 text-eco-green px-2 py-0.5 rounded-full">${d.temp}</span>
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+                    </div>
+                `;
+            }
+            listContainer.innerHTML = html;
+        }
+
+        function openDistrictExplorer() {
+            renderDistrictList();
+            document.getElementById('district-explorer-modal').classList.remove('translate-x-full');
+        }
+
+        function closeDistrictExplorer() {
+            document.getElementById('district-explorer-modal').classList.add('translate-x-full');
+            document.getElementById('district-detail-view').classList.add('translate-x-full'); 
+        }
+
+        function openDistrictDetail(key) {
+            const d = districts[key];
+            if (!d) return showToast('Data loading...');
+
+            document.getElementById('d-detail-img').src = d.img;
+            document.getElementById('d-detail-name').innerText = d.name;
+            document.getElementById('d-detail-desc').innerText = d.desc;
+            document.getElementById('d-detail-pop').innerText = d.pop;
+            document.getElementById('d-detail-temp').innerText = d.temp;
+            document.getElementById('d-detail-alt').innerText = d.alt;
+            document.getElementById('d-detail-attr').innerText = d.attr;
+            document.getElementById('d-detail-advice').innerText = d.advice;
+            
+            // New Data Fields
+            document.getElementById('d-detail-culture').innerText = d.culture;
+            document.getElementById('d-detail-logistics').innerText = d.logistics;
+            document.getElementById('d-detail-fact').innerText = d.fact;
+
+            document.getElementById('district-detail-view').classList.remove('translate-x-full');
+        }
+
+        function closeDistrictDetail() {
+            document.getElementById('district-detail-view').classList.add('translate-x-full');
+        }
+
+        // OTHER MODALS
+        function triggerAI() {
+            const modal = document.getElementById('ai-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                setTimeout(() => modal.classList.remove('opacity-0'), 10);
+                document.getElementById('ai-thinking').classList.add('hidden');
+                document.getElementById('ai-result').classList.remove('hidden');
+            }, 1500);
+        }
+        function closeAI() {
+            const modal = document.getElementById('ai-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); document.getElementById('ai-thinking').classList.remove('hidden'); document.getElementById('ai-result').classList.add('hidden'); }, 300);
+        }
+        function openDetail(id) {
+            const p = places[id];
+            if (!p) return showToast('Details coming soon');
+            document.getElementById('detail-img').src = p.img;
+            document.getElementById('detail-title').innerText = p.title;
+            document.getElementById('detail-loc').innerText = p.district;
+            document.getElementById('detail-start').innerText = p.start;
+            document.getElementById('detail-dist').innerText = p.dist;
+            document.getElementById('detail-gain').innerText = p.gain;
+            document.getElementById('detail-days').innerText = p.days;
+            document.getElementById('detail-modal').classList.remove('translate-y-full');
+        }
+        function closeDetail() { document.getElementById('detail-modal').classList.add('translate-y-full'); }
+        
+        // SOS
+        function showSOS() {
+            const modal = document.getElementById('sos-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            document.getElementById('sos-step-1').classList.remove('hidden');
+            document.getElementById('sos-step-2').classList.add('hidden');
+        }
+        function closeSOS() {
+            const modal = document.getElementById('sos-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+        function confirmSOS() {
+            document.getElementById('sos-step-1').classList.add('hidden');
+            document.getElementById('sos-step-2').classList.remove('hidden');
+        }
+        function triggerRealCall(number) {
+            showToast(`Dialing ${number}... GPS location transmitted.`);
+            setTimeout(closeSOS, 1000); 
+        }
+
+        window.onload = () => {
+            const initialNav = document.querySelector('.nav-item.active-nav');
+            if(initialNav) switchView('home', initialNav);
+            setTimeout(() => { document.getElementById('splash-screen').classList.add('hidden-splash'); document.body.style.overflow='auto'; }, 2000);
+        }
+    </script>
+</body>
+</html>
