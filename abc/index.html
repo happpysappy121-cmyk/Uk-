@@ -234,7 +234,6 @@
     .trip-item:hover { transform: translateY(-4px); }
 
     /* add premium slider styles */
-    <style>
       /* Slider track + slide visuals */
       .kv-track { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
       .kv-slide { scroll-snap-align: center; min-width: 320px; transform-origin: center; transition: transform 360ms cubic-bezier(.2,.9,.2,1), box-shadow 360ms; }
@@ -530,7 +529,7 @@
                 </div>
                 <!-- Food 2 -->
                 <div class="w-[160px] h-[200px] shrink-0 snap-center rounded-2xl relative overflow-hidden cursor-pointer group">
-                    <img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=fit&w=400&q=80" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Kafuli'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <img src="https://lh3.googleusercontent.com/d/1P9-mfult0P3pPalEAKHWX_WsbabOAQSS" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Kafuli'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                     <div class="absolute inset-0 bg-food-gradient"></div>
                     <div class="absolute bottom-3 left-3 text-white">
                         <p class="text-xs font-bold text-terracotta uppercase mb-1">Savory</p>
@@ -576,21 +575,21 @@
             </div>
             <div class="pl-5 overflow-x-auto snap-x-mandatory no-scrollbar flex gap-4 pb-4">
                 <div class="w-[160px] h-[180px] shrink-0 snap-center rounded-2xl relative overflow-hidden cursor-pointer group">
-                    <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=80" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Woodcraft'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <img src="https://lh3.googleusercontent.com/d/1eXG0xwuL9Y6_kty6Y2_0QvW-4mwU0FBA" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Woodcraft'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                     <div class="absolute bottom-3 left-3 text-white">
                         <h4 class="font-serif font-bold text-lg leading-none">Wood Carving</h4>
                         <p class="text-xs">Almora & Kasar Devi</p>
                     </div>
                 </div>
                 <div class="w-[160px] h-[180px] shrink-0 snap-center rounded-2xl relative overflow-hidden cursor-pointer group">
-                    <img src="https://images.unsplash.com/photo-1555529771-4a33f3f6166a?auto=format&fit=crop&w=400&q=80" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Woolens'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <img src="https://lh3.googleusercontent.com/d/1Myll5Z4eUwsQ6YeLDKXTY5S-ql02heeU" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Woolens'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                     <div class="absolute bottom-3 left-3 text-white">
                         <h4 class="font-serif font-bold text-lg leading-none">Wool Weaves</h4>
                         <p class="text-xs">Pithoragarh • Champawat</p>
                     </div>
                 </div>
                 <div class="w-[160px] h-[180px] shrink-0 snap-center rounded-2xl relative overflow-hidden cursor-pointer group">
-                    <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=400&q=80" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Candles'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <img src="https://lh3.googleusercontent.com/d/1UhOcAkKAH5SoA9KIjJWuIE5hyEfrSloJ" onerror="this.src='https://placehold.co/400x400/1a3c33/d4af37?text=Candles'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                     <div class="absolute bottom-3 left-3 text-white">
                         <h4 class="font-serif font-bold text-lg leading-none">Wood & Candle Art</h4>
                         <p class="text-xs">Nainital Markets</p>
@@ -629,7 +628,7 @@
         </div>
 
         <!-- Festival modal (list events for selected month) -->
-        <div id="festival-modal" class="fixed inset-0 z-[1200] hidden items-center justify-center p-4 bg-black/50">
+        <div id="festival-modal" class="fixed inset-0 z-[1200] hidden items-center justify-center p-4 bg-black/50 opacity-0">
             <div class="bg-white w-full max-w-md rounded-2xl overflow-hidden">
                 <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
                     <h3 id="festival-modal-title" class="text-lg font-bold text-alpine-dark">Month</h3>
@@ -1322,9 +1321,84 @@
             openFestivalCalendar();
         }
 
+        // open teaser -> explorer -> detail (used by teaser cards)
+        function openDistrictFromTeaser(key){
+            openDistrictExplorer();
+            // small delay for modal slide-in, then open detail
+            setTimeout(() => {
+                if (districts[key]) openDistrictDetail(key);
+                else showToast('District data not available');
+            }, 320);
+        }
+
+        // Simple KV slider initialization: dots, active slide tracking, prev/next handlers
+        function initKVSlider(){
+            const track = document.getElementById('kv-track');
+            if (!track) return;
+            const slides = Array.from(track.querySelectorAll('.kv-slide'));
+            const dotsContainer = document.getElementById('kv-dots');
+            dotsContainer.innerHTML = '';
+
+            slides.forEach((s, i) => {
+                const dot = document.createElement('button');
+                dot.className = 'kv-dot';
+                dot.setAttribute('aria-label', `Go to slide ${i+1}`);
+                dot.onclick = () => s.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+                dotsContainer.appendChild(dot);
+            });
+
+            const prev = document.getElementById('kv-prev');
+            const next = document.getElementById('kv-next');
+
+            function findActiveIndex(){
+                const trackRect = track.getBoundingClientRect();
+                const centerX = trackRect.left + track.clientWidth / 2;
+                let bestIndex = 0;
+                let bestDist = Infinity;
+                slides.forEach((s, idx) => {
+                    const sRect = s.getBoundingClientRect();
+                    const sCenter = sRect.left + sRect.width / 2;
+                    const dist = Math.abs(sCenter - centerX);
+                    if (dist < bestDist) { bestDist = dist; bestIndex = idx; }
+                });
+                return bestIndex;
+            }
+
+            function updateActive(){
+                const active = findActiveIndex();
+                const dotButtons = dotsContainer.querySelectorAll('.kv-dot');
+                dotButtons.forEach((d, i) => d.classList.toggle('active', i === active));
+                slides.forEach((s, i) => s.classList.toggle('active', i === active));
+            }
+
+            track.addEventListener('scroll', () => window.requestAnimationFrame(updateActive));
+            // Prev/Next handlers: scroll to previous/next slide
+            prev && prev.addEventListener('click', () => {
+                const idx = Math.max(0, findActiveIndex() - 1);
+                slides[idx].scrollIntoView({ behavior: 'smooth', inline: 'center' });
+            });
+            next && next.addEventListener('click', () => {
+                const idx = Math.min(slides.length - 1, findActiveIndex() + 1);
+                slides[idx].scrollIntoView({ behavior: 'smooth', inline: 'center' });
+            });
+
+            // initial state
+            updateActive();
+
+            // show/hide arrows depending on viewport (matches CSS intent)
+            const mq = window.matchMedia('(min-width: 768px)');
+            function updateArrows(){
+                if (mq.matches) { prev?.classList.remove('hidden'); next?.classList.remove('hidden'); }
+                else { prev?.classList.add('hidden'); next?.classList.add('hidden'); }
+            }
+            mq.addEventListener('change', updateArrows);
+            updateArrows();
+        }
+
         window.onload = () => {
             const initialNav = document.querySelector('.nav-item.active-nav');
             if(initialNav) switchView('home', initialNav);
+            initKVSlider();
             setTimeout(() => { document.getElementById('splash-screen').classList.add('hidden-splash'); document.body.style.overflow='auto'; }, 2000);
         }
     </script>
